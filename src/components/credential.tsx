@@ -1,3 +1,4 @@
+import { Feather } from '@expo/vector-icons'
 import {
   Image,
   ImageBackground,
@@ -6,7 +7,14 @@ import {
   View,
 } from 'react-native'
 
-export function Credential() {
+import { colors } from '@/styles/colors'
+
+interface CredentialProps {
+  image?: string
+  onChangeAvatar?: () => void
+}
+
+export function Credential({ image, onChangeAvatar }: CredentialProps) {
   return (
     <View className="w-full self-stretch items-center">
       <Image
@@ -23,15 +31,25 @@ export function Credential() {
             <Text className="text-zinc-50 text-sm font-bold">Unite Summit</Text>
             <Text className="text-zinc-50 text-sm font-bold">#123456</Text>
           </View>
-
-          {/* <View className="w-40 h-40 bg-black rounded-full" /> */}
         </ImageBackground>
 
-        <Image
-          source={{ uri: 'https://github.com/GabriPires.png' }}
-          alt="Foto do usuário"
-          className="w-36 h-36 rounded-full -mt-24 border-4 border-black"
-        />
+        {image ? (
+          <TouchableOpacity activeOpacity={0.7} onPress={onChangeAvatar}>
+            <Image
+              source={{ uri: image }}
+              alt="Foto do usuário"
+              className="w-36 h-36 rounded-full -mt-24 border-4 border-black"
+            />
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            className="w-36 h-36 rounded-full -mt-24 border-4 border-black bg-gray-400 items-center justify-center"
+            onPress={onChangeAvatar}
+          >
+            <Feather name="camera" size={32} color={colors.green[400]} />
+          </TouchableOpacity>
+        )}
 
         <Text className="font-bold text-2xl text-zinc-50 mt-4">
           Gabriel Pires
