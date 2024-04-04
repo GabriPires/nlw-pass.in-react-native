@@ -1,6 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 import { Redirect } from 'expo-router'
+import { MotiView } from 'moti'
 import { useState } from 'react'
 import {
   Alert,
@@ -19,7 +20,6 @@ import { Header } from '@/components/header'
 import { QRCode } from '@/components/qrcode'
 import { useBadgeStore } from '@/store/badge-store'
 import { colors } from '@/styles/colors'
-
 export default function Ticket() {
   const [showQRCode, setShowQRCode] = useState(false)
 
@@ -75,12 +75,26 @@ export default function Ticket() {
           onShowQRCode={() => setShowQRCode(true)}
         />
 
-        <FontAwesome
-          name="angle-double-down"
-          size={24}
-          color={colors.gray[300]}
-          className="self-center my-6"
-        />
+        <MotiView
+          from={{
+            translateY: 0,
+          }}
+          animate={{
+            translateY: 10,
+          }}
+          transition={{
+            loop: true,
+            type: 'timing',
+            duration: 700,
+          }}
+        >
+          <FontAwesome
+            name="angle-double-down"
+            size={24}
+            color={colors.gray[300]}
+            className="self-center my-6"
+          />
+        </MotiView>
 
         <Text className="text-white font-bold text-2xl mt-4">
           Compartilhar credencial
