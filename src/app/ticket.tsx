@@ -2,6 +2,7 @@ import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 import { useState } from 'react'
 import {
+  Modal,
   ScrollView,
   StatusBar,
   Text,
@@ -12,10 +13,12 @@ import {
 import { Button } from '@/components/button'
 import { Credential } from '@/components/credential'
 import { Header } from '@/components/header'
+import { QRCode } from '@/components/qrcode'
 import { colors } from '@/styles/colors'
 
 export default function Ticket() {
   const [image, setImage] = useState('')
+  const [showQRCode, setShowQRCode] = useState(false)
 
   async function handleSelectImage() {
     try {
@@ -44,7 +47,11 @@ export default function Ticket() {
         contentContainerClassName="px-8 pb-8"
         showsVerticalScrollIndicator={false}
       >
-        <Credential image={image} onChangeAvatar={handleSelectImage} />
+        <Credential
+          image={image}
+          onChangeAvatar={handleSelectImage}
+          onShowQRCode={() => setShowQRCode(true)}
+        />
 
         <FontAwesome
           name="angle-double-down"
@@ -69,6 +76,25 @@ export default function Ticket() {
           </Text>
         </TouchableOpacity>
       </ScrollView>
+
+      <Modal
+        visible={showQRCode}
+        animationType="slide"
+        statusBarTranslucent
+        onRequestClose={() => setShowQRCode(false)}
+      >
+        <View className="flex-1 bg-green-500 items-center justify-center">
+          <QRCode size={300} value="teste" />
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => setShowQRCode(false)}
+          >
+            <Text className="font-base text-orange-500 text-sm mt-10">
+              Fechar QRCode
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   )
 }

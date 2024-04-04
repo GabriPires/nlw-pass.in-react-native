@@ -13,9 +13,14 @@ import { colors } from '@/styles/colors'
 interface CredentialProps {
   image?: string
   onChangeAvatar?: () => void
+  onShowQRCode?: () => void
 }
 
-export function Credential({ image, onChangeAvatar }: CredentialProps) {
+export function Credential({
+  image,
+  onChangeAvatar,
+  onShowQRCode,
+}: CredentialProps) {
   return (
     <View className="w-full self-stretch items-center">
       <Image
@@ -61,7 +66,11 @@ export function Credential({ image, onChangeAvatar }: CredentialProps) {
 
         <QRCode size={120} value="teste" />
 
-        <TouchableOpacity activeOpacity={0.7} className="mt-6">
+        <TouchableOpacity
+          activeOpacity={0.7}
+          className="mt-6"
+          onPress={onShowQRCode}
+        >
           <Text className="font-base text-orange-500 text-sm">
             Ampliar QRCode
           </Text>
