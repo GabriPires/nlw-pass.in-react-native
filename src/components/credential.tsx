@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native'
 
+import { QRCode } from '@/components/qrcode'
 import { colors } from '@/styles/colors'
 
 interface CredentialProps {
@@ -58,11 +59,7 @@ export function Credential({ image, onChangeAvatar }: CredentialProps) {
           gabriel@email.com
         </Text>
 
-        <Image
-          source={require('@/assets/ticket/qrcode.png')}
-          alt="QRCode"
-          className="w-32 h-32"
-        />
+        <QRCode size={120} value="teste" />
 
         <TouchableOpacity activeOpacity={0.7} className="mt-6">
           <Text className="font-base text-orange-500 text-sm">
