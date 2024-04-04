@@ -1,22 +1,61 @@
 import { FontAwesome6, MaterialIcons } from '@expo/vector-icons'
+import axios from 'axios'
 import { Link, router } from 'expo-router'
 import { useState } from 'react'
 import { Alert, Image, StatusBar, View } from 'react-native'
 
 import { Button } from '@/components/button'
 import { Input } from '@/components/input'
+import { api } from '@/lib/axios'
 import { colors } from '@/styles/colors'
 
 export default function Register() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
-  function handleRegister() {
+  async function handleRegister() {
     if (!name.trim() || !email.trim()) {
       Alert.alert('Inscrição inválida', 'Preencha todos os campos')
     }
 
-    router.push('/ticket')
+    try {
+      setIsLoading(true)
+
+      const response = await api.post(
+        '/events/a747d00b-eef9-4290-9ac0-a94a16549083/attendees',
+        {
+          name,
+          email,
+        },
+      )
+
+      if (response.data.attendeeId) {
+        Alert.alert('Inscrição', 'Inscrição realizada com sucesso!', [
+          {
+            text: 'Ok',
+            onPress: () => router.push('/ticket'),
+          },
+        ])
+      }
+    } catch (error) {
+      console.error(error)
+
+      if (axios.isAxiosError(error)) {
+        if (
+          String(error.response?.data.message).includes('already registered')
+        ) {
+          return Alert.alert('Inscrição', 'Este e-mail já está cadastrado')
+        }
+      }
+
+      Alert.alert(
+        'Inscrição',
+        'Não foi possível realizar a inscrição, tente novamente mais tarde',
+      )
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -57,7 +96,11 @@ export default function Register() {
           />
         </Input>
 
-        <Button title="Realizar inscrição" onPress={handleRegister} />
+        <Button
+          title="Realizar inscrição"
+          onPress={handleRegister}
+          isLoading={isLoading}
+        />
 
         <Link
           href="/"
