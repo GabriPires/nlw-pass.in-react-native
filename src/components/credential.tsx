@@ -12,14 +12,12 @@ import { Badge } from '@/store/badge-store'
 import { colors } from '@/styles/colors'
 
 interface CredentialProps {
-  image?: string
   data: Badge
   onChangeAvatar?: () => void
   onShowQRCode?: () => void
 }
 
 export function Credential({
-  image,
   data,
   onChangeAvatar,
   onShowQRCode,
@@ -44,10 +42,10 @@ export function Credential({
           </View>
         </ImageBackground>
 
-        {image ? (
+        {data.image ? (
           <TouchableOpacity activeOpacity={0.7} onPress={onChangeAvatar}>
             <Image
-              source={{ uri: image }}
+              source={{ uri: data.image }}
               alt="Foto do usuário"
               className="w-36 h-36 rounded-full -mt-24 border-4 border-black"
             />

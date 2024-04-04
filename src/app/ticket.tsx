@@ -19,10 +19,9 @@ import { useBadgeStore } from '@/store/badge-store'
 import { colors } from '@/styles/colors'
 
 export default function Ticket() {
-  const [image, setImage] = useState('')
   const [showQRCode, setShowQRCode] = useState(false)
 
-  const { data, remove } = useBadgeStore()
+  const { data, remove, updateAvatar } = useBadgeStore()
 
   async function handleSelectImage() {
     try {
@@ -33,7 +32,7 @@ export default function Ticket() {
       })
 
       if (result.assets) {
-        setImage(result.assets[0].uri)
+        updateAvatar(result.assets[0].uri)
       }
     } catch (error) {
       console.log(error)
@@ -57,7 +56,6 @@ export default function Ticket() {
       >
         <Credential
           data={data}
-          image={image}
           onChangeAvatar={handleSelectImage}
           onShowQRCode={() => setShowQRCode(true)}
         />

@@ -15,6 +15,7 @@ interface BadgeStore {
   data: Badge | null
   save: (badge: Badge) => void
   remove: () => void
+  updateAvatar: (uri: string) => void
 }
 
 export const useBadgeStore = create(
@@ -23,6 +24,15 @@ export const useBadgeStore = create(
       data: null,
       save: (badge) => set({ data: badge }),
       remove: () => set({ data: null }),
+      updateAvatar: (uri) =>
+        set((state) => ({
+          data: state.data
+            ? {
+                ...state.data,
+                image: uri,
+              }
+            : null,
+        })),
     }),
     {
       name: 'pass.in:badge',
