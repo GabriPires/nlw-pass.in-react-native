@@ -7,12 +7,15 @@ import { Alert, Image, StatusBar, View } from 'react-native'
 import { Button } from '@/components/button'
 import { Input } from '@/components/input'
 import { api } from '@/lib/axios'
+import { useBadgeStore } from '@/store/badge-store'
 import { colors } from '@/styles/colors'
 
 export default function Register() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+
+  const { save } = useBadgeStore()
 
   async function handleRegister() {
     if (!name.trim() || !email.trim()) {
@@ -31,6 +34,12 @@ export default function Register() {
       )
 
       if (response.data.attendeeId) {
+        const { data } = await api.get(
+          `/attendees/${response.data.attendeeId}/badge`,
+        )
+
+        save(data.badge)
+
         Alert.alert('Inscrição', 'Inscrição realizada com sucesso!', [
           {
             text: 'Ok',

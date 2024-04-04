@@ -1,5 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
+import { Redirect } from 'expo-router'
 import { useState } from 'react'
 import {
   Modal,
@@ -14,11 +15,14 @@ import { Button } from '@/components/button'
 import { Credential } from '@/components/credential'
 import { Header } from '@/components/header'
 import { QRCode } from '@/components/qrcode'
+import { useBadgeStore } from '@/store/badge-store'
 import { colors } from '@/styles/colors'
 
 export default function Ticket() {
   const [image, setImage] = useState('')
   const [showQRCode, setShowQRCode] = useState(false)
+
+  const { data, remove } = useBadgeStore()
 
   async function handleSelectImage() {
     try {
@@ -36,6 +40,10 @@ export default function Ticket() {
     }
   }
 
+  if (!data) {
+    return <Redirect href="/" />
+  }
+
   return (
     <View className="flex-1 bg-green-500">
       <StatusBar barStyle="light-content" />
@@ -48,6 +56,7 @@ export default function Ticket() {
         showsVerticalScrollIndicator={false}
       >
         <Credential
+          data={data}
           image={image}
           onChangeAvatar={handleSelectImage}
           onShowQRCode={() => setShowQRCode(true)}
@@ -65,12 +74,16 @@ export default function Ticket() {
         </Text>
 
         <Text className="text-white font-regular text-base mt-1 mb-6">
-          Mostre ao mundo que você vai participar do Unite Summit!
+          Mostre ao mundo que você vai participar do {data.eventTitle}!
         </Text>
 
         <Button title="Compartilhar" />
 
-        <TouchableOpacity activeOpacity={0.7} className="mt-10 pb-4">
+        <TouchableOpacity
+          activeOpacity={0.7}
+          className="mt-10 pb-4"
+          onPress={remove}
+        >
           <Text className="text-base text-white font-bold text-center">
             Remover ingresso
           </Text>
@@ -84,7 +97,7 @@ export default function Ticket() {
         onRequestClose={() => setShowQRCode(false)}
       >
         <View className="flex-1 bg-green-500 items-center justify-center">
-          <QRCode size={300} value="teste" />
+          <QRCode size={300} value={data.checkInURL} />
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => setShowQRCode(false)}

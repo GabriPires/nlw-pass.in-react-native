@@ -8,16 +8,19 @@ import {
 } from 'react-native'
 
 import { QRCode } from '@/components/qrcode'
+import { Badge } from '@/store/badge-store'
 import { colors } from '@/styles/colors'
 
 interface CredentialProps {
   image?: string
+  data: Badge
   onChangeAvatar?: () => void
   onShowQRCode?: () => void
 }
 
 export function Credential({
   image,
+  data,
   onChangeAvatar,
   onShowQRCode,
 }: CredentialProps) {
@@ -34,8 +37,10 @@ export function Credential({
           className="px-6 py-8 h-40 items-center self-stretch border-b border-white/10 overflow-hidden"
         >
           <View className="w-full flex-row items-center justify-between">
-            <Text className="text-zinc-50 text-sm font-bold">Unite Summit</Text>
-            <Text className="text-zinc-50 text-sm font-bold">#123456</Text>
+            <Text className="text-zinc-50 text-sm font-bold">
+              {data.eventTitle}
+            </Text>
+            <Text className="text-zinc-50 text-sm font-bold">#{data.id}</Text>
           </View>
         </ImageBackground>
 
@@ -58,13 +63,13 @@ export function Credential({
         )}
 
         <Text className="font-bold text-2xl text-zinc-50 mt-4">
-          Gabriel Pires
+          {data.name}
         </Text>
         <Text className="font-regular text-base text-zinc-300 mb-4">
-          gabriel@email.com
+          {data.email}
         </Text>
 
-        <QRCode size={120} value="teste" />
+        <QRCode size={120} value={data.checkInURL} />
 
         <TouchableOpacity
           activeOpacity={0.7}

@@ -25,7 +25,7 @@ export default function Home() {
 
       const { data } = await api.get(`/attendees/${code}/badge`)
 
-      save(data)
+      save(data.badge)
     } catch (error) {
       console.log(error)
       Alert.alert('Ingresso', 'Não foi possível acessar a credencial')

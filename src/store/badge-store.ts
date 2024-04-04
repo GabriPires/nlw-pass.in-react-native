@@ -14,6 +14,7 @@ export interface Badge {
 interface BadgeStore {
   data: Badge | null
   save: (badge: Badge) => void
+  remove: () => void
 }
 
 export const useBadgeStore = create(
@@ -21,6 +22,7 @@ export const useBadgeStore = create(
     (set) => ({
       data: null,
       save: (badge) => set({ data: badge }),
+      remove: () => set({ data: null }),
     }),
     {
       name: 'pass.in:badge',
