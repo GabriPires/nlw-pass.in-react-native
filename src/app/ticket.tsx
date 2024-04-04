@@ -3,8 +3,10 @@ import * as ImagePicker from 'expo-image-picker'
 import { Redirect } from 'expo-router'
 import { useState } from 'react'
 import {
+  Alert,
   Modal,
   ScrollView,
+  Share,
   StatusBar,
   Text,
   TouchableOpacity,
@@ -22,6 +24,19 @@ export default function Ticket() {
   const [showQRCode, setShowQRCode] = useState(false)
 
   const { data, remove, updateAvatar } = useBadgeStore()
+
+  async function handleShare() {
+    try {
+      if (data?.checkInURL) {
+        await Share.share({
+          message: `Olá! Estou compartilhando minha credencial para o ${data.eventTitle}. Confira: ${data.checkInURL}`,
+        })
+      }
+    } catch (error) {
+      console.log(error)
+      Alert.alert('Erro', 'Não foi possível compartilhar a credencial')
+    }
+  }
 
   async function handleSelectImage() {
     try {
@@ -75,7 +90,7 @@ export default function Ticket() {
           Mostre ao mundo que você vai participar do {data.eventTitle}!
         </Text>
 
-        <Button title="Compartilhar" />
+        <Button title="Compartilhar" onPress={handleShare} />
 
         <TouchableOpacity
           activeOpacity={0.7}
